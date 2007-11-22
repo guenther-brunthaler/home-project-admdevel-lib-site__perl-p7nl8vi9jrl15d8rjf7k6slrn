@@ -1,8 +1,8 @@
 # $xsa1={FBF02760-95CF-11D3-BD96-0040C72500FD}$
 # $RCSfile$
-# $Revision: 11 $
-# $Date: 2006-11-06T23:14:31.537884Z $
-# $Author: root(xternal) $
+# $Revision: 2675 $
+# $Date: 2006-09-28T11:17:02.382148Z $
+# $Author: gb $
 # $State$
 # $xsa1$
 
@@ -16,7 +16,7 @@ package Lib::Workfile;
 # destroyed or re-used.
 use PkgVersion_B9A179B0_9FB3_11D9_BFF3_00A0C9EF1631;
 # Version substrings: "4" => 4, "5.6" => 5.006, "7.8.9" => 7.008009
-our $VERSION= extract_VERSION_from '$Revision: 11 $';
+our $VERSION= extract_VERSION_from '$Revision: 2675 $';
 
 
 use HandleOptions_F467BD47_CBA4_11D5_9920_C23CC971FBD2;

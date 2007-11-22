@@ -1,8 +1,8 @@
 # $xsa1={FBF02760-95CF-11D3-BD96-0040C72500FD}$
 # $RCSfile$
-# $Revision: 11 $
-# $Date: 2006-11-06T23:14:31.537884Z $
-# $Author: root(xternal) $
+# $Revision$
+# $Date$
+# $Author$
 # $State$
 # $xsa1$
 

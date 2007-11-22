@@ -1,8 +1,8 @@
 # $xsa1={FBF02760-95CF-11D3-BD96-0040C72500FD}$
 # $RCSfile$
-# $Revision: 11 $
-# $Date: 2006-11-06T23:14:31.537884Z $
-# $Author: root(xternal) $
+# $Revision: 2673 $
+# $Date: 2006-08-28T21:08:25.327061Z $
+# $Author: gb $
 # $State$
 # $xsa1$
 
@@ -39,7 +39,7 @@ use strict;
 #
 #
 #    # Version substrings: "4" => 4, "5.6" => 5.006, "7.8.9" => 7.008009
-#    our $VERSION= extract_VERSION_from '$Revision: 11 $';
+#    our $VERSION= extract_VERSION_from '$Revision: 2673 $';
 #    our @EXPORT_OK= qw(func1 func2 etc);
 #
 # will actually import from package 'Lib::MyModule' in the same source
