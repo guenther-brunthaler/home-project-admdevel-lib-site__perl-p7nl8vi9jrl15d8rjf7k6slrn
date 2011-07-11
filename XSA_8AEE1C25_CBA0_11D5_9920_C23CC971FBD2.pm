@@ -959,7 +959,7 @@ C<set> sets or unsets an XSA object's properties.
             $xsa= new XSA;
             open IN, '<infile';
             open OUT, '>outfile';
-            $xsa->set(-in => *IN{FILEHANDLE}, -out => *OUT{FILEHANDLE});
+            $xsa->set(-in => *IN{IO}, -out => *OUT{IO});
             ...
             close OUT;
             close IN;
@@ -990,7 +990,7 @@ Binds the output file.
 
 Specifies a reference to the file handle to be bound.
 
-If the file handle has the name 'FOO', then use '*FOO{FILEHANDLE}'
+If the file handle has the name 'FOO', then use '*FOO{IO}'
 as the argument in order to obtain a reference to it.
 
 =item key C<-line>
@@ -1310,7 +1310,7 @@ power.
             $xsa->open('<infile');
             open IN, '<infile';
             open OUT, '>outfile';
-            $xsa->set(in => *IN{FILEHANDLE}, out => *OUT{FILEHANDLE});
+            $xsa->set(in => *IN{IO}, out => *OUT{IO});
             while ($xsa->read) {
                $xsa->write;
             }
@@ -1405,7 +1405,7 @@ after every line containing the string C<printf>:
             $xsa= new XSA;
             open IN, "<infile";
             open OUT, ">outfile";
-            $xsa->set(in => *IN{FILEHANDLE}, out => *STDOUT{FILEHANDLE});
+            $xsa->set(in => *IN{IO}, out => *STDOUT{IO});
             my $add= undef;
             while ($xsa->read) {
                if (!$xsa->is_mark) {

@@ -102,8 +102,8 @@ sub create {
       }
    }
    $self->{rf_original}->open(-filename => $fname);
-   $self->{rf_new}->create(-filename => $nfname);
-   $self->{rf_new}->file_handle, $self->{rf_original}->file_handle;
+   $self->{rf_new}->create(-filename => $nfname, -template => $fname);
+   return $self->{rf_new}->file_handle, $self->{rf_original}->file_handle;
 }
 
 

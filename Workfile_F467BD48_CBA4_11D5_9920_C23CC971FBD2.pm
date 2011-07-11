@@ -30,6 +30,8 @@ use Carp;
 # $self->{wf_pipe}: whether wf_object refers to a pipe.
 # $self->{wf_newname}: Name to which it should be renamed, if any.
 # $self->{wf_fh}: File handle or undef if object is idle.
+# $self->{wf_mode}: Optional permissions/mode of the template file.
+# $self->{wf_owner}: Optional {$uid, $gid} of the template file.
 # $self->{wf_transaction}: Method for reuse/destruction after closing file.
 # $self->{wf_read_write}.
 
@@ -49,7 +51,8 @@ sub arghelper {
    my($self, $args)= @_;
    Lib::HandleOptions(
       -source => $args, -target => $self, -prefix => 'wf_'
-      , -arguments => [qw/filename pipe/], -options => [read_write => 0]
+      , -arguments => [qw/filename pipe/]
+      , -options => [read_write => 0, template => undef]
       , -mutual_exclusions => [[qw/pipe read_write/]]
       , -rename => [filename => 'object', pipe => 'object']
    );
@@ -66,6 +69,7 @@ sub arghelper {
 # -pipe => output pipe to be created.
 # Options:
 # -read_write => file will be created read/writable (default: write only).
+# -template => file from which to try cloning ownership/permissions.
 sub create {
    my $self= shift;
    $self->commit;
@@ -77,12 +81,22 @@ sub create {
          croak "Cannot create pipe to command '$self->{wf_object}': $!";
       }
    } else {
-      $self->delete_on_close;
+      $self->remain_on_close;
+      if (defined $self->{wf_template}) {
+         my($mode, $uid, $gid)= @{[stat $self->{wf_template}]}[2, 4, 5];
+         unless ($mode && $uid && $gid) {
+            croak "Cannot stat '$self->{wf_template}': $!";
+         }
+         delete $self->{wf_template};
+         $self->{wf_mode}= $mode;
+         $self->{wf_owner}= [$uid, $gid] if defined($uid) && defined($gid);
+      }
       unless (
          open FH, $self->{wf_read_write} ? '+>' : '>', $self->{wf_object}
       ) {
          croak "Cannot create file '$self->{wf_object}': $!";
       }
+      $self->delete_on_close;
    }
    return $self->{wf_fh}= *FH{IO};
 }
@@ -236,12 +250,31 @@ sub remain_on_close {
 sub commit {
    my $self= shift;
    my $fh;
+   my($owner, $mode)= ($self->{wf_owner}, $self->{wf_mode});
+   undef $self->{wf_owner};
+   undef $self->{wf_mode};
    return unless defined($fh= $self->{wf_fh});
    undef $self->{wf_fh};
    unless (close $fh) {
       croak "Transaction aborted - cannot close $self->{wf_type}"
          . " '$self->{wf_object}': $!"
       ;
+   }
+   if (defined $owner) {
+      # Try to change owner. No big issue if it is not possible.
+      # Most of the time, only the superuser can do this anyway.
+      chown @{$owner}, $self->{wf_object};
+   }
+   if (defined $mode) {
+      # Try to change owner. No big issue if it is not possible.
+      # Most of the time, only the superuser can do this anyway.
+      my $bad;
+      $bad= $! unless chmod($mode, $self->{wf_object}) == 1;
+      if ($bad) {
+         croak "Could not change permissions for "
+            . "new file ' $self->{wf_object}': $bad"
+         ;
+      }
    }
    &{$self->{wf_transaction}}($self) if defined $self->{wf_transaction};
 }

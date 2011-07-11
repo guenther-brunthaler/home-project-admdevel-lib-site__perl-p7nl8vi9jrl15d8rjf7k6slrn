@@ -24,7 +24,7 @@ use Carp;
 # -source => Reference to argument list to be checked.
 # Optional arguments:
 # -options => Reference to flat list of (option => default) pairs.
-# -arguments => Reference to list of mandatory arguments.
+# -arguments => Reference to list of mandatory options.
 # -prefix => Prefix string to be prepended to target hash keys.
 # -rename =>
 #  Reference to flat list of (old_name => new_name) pairs.
