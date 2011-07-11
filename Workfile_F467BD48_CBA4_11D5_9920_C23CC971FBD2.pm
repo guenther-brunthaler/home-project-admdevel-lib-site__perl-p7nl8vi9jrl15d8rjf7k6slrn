@@ -84,7 +84,7 @@ sub create {
       $self->remain_on_close;
       if (defined $self->{wf_template}) {
          my($mode, $uid, $gid)= @{[stat $self->{wf_template}]}[2, 4, 5];
-         unless ($mode && $uid && $gid) {
+         unless (defined($mode) && defined($uid) && defined($gid)) {
             croak "Cannot stat '$self->{wf_template}': $!";
          }
          delete $self->{wf_template};
